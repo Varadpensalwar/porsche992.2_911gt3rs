@@ -19,14 +19,7 @@ Description: |-
   - High-quality images and videos
   - Performance metrics and comparisons with other models
 Summary: A web app converted to Android using Capacitor
-Description: |-
-  Your application description goes here. Write a thorough
-  description of what your app does and why users would want it.
-  
-  This description supports multiple paragraphs and will be
-  displayed on the F-Droid store page.
-  
-  Be sure to highlight the key features of your application.
+
 
 RepoType: git
 Repo: https://github.com/Varadpensalwar/porsche992.2_911gt3rs
