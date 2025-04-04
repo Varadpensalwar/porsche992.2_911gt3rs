@@ -1,0 +1,7 @@
+{
+  "name": "porsche911gt3rs",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

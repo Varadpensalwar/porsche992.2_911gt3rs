@@ -1,0 +1,10 @@
+Build:
+  subdir: "android"  # Path to the Android project
+  init: yarn install  # Install JS dependencies
+  sudo:
+    - curl -Lo node.tar.xz https://nodejs.org/dist/v16.14.2/node-v16.14.2-linux-x64.tar.xz  # Install Node.js
+    # ... (verify checksum and extract)
+  scandelete:
+    - node_modules/  # Remove non-free dependencies
+  scanignore:
+    - android/build.gradle  # Ignore React Native-specific files (if applicable)
