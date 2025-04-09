@@ -84,7 +84,7 @@
     background: linear-gradient(135deg, var(--burgundy), var(--navy-blue), var(--emerald-green));
     box-shadow: 0 0 25px var(--glow);
     animation: float 10
-  ```css
+  }
   /* src/App.css */
   
   /* ============================================
