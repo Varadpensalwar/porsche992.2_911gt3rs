@@ -5,16 +5,91 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Porsche 911 GT3 RS Video Gallery"
-    />
+    <meta name="description" content="Porsche 911 GT3 RS Video Gallery" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Porsche 911 GT3 RS</title>
+    <!-- Link to your App.css which contains mobile responsive styles -->
+    <link rel="stylesheet" href="App.css" />
+    <style>
+      /* Mobile menu toggle styles */
+      .mobile-menu-toggle {
+        display: none;
+        font-size: 1.8rem;
+        color: var(--ivory);
+        cursor: pointer;
+      }
+      @media (max-width: 768px) {
+        .mobile-menu-toggle {
+          display: block;
+        }
+        /* Ensure nav-links are hidden by default on mobile */
+        .nav-links {
+          display: none;
+        }
+        .nav-bar.active .nav-links {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          background: var(--charcoal);
+          padding: var(--spacing-unit);
+        }
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Navigation Bar -->
+      <nav class="nav-bar">
+        <div class="nav-logo">Porsche 911 GT3 RS</div>
+        <!-- Mobile menu toggle button -->
+        <div class="mobile-menu-toggle" id="mobile-menu-toggle">&#9776;</div>
+        <div class="nav-links" id="nav-links">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#" class="nav-link">Gallery</a>
+          <div class="nav-dropdown">
+            <a href="#" class="nav-link">Models</a>
+            <div class="dropdown-content">
+              <a href="#" class="dropdown-item">911 Carrera</a>
+              <a href="#" class="dropdown-item">911 Turbo</a>
+              <a href="#" class="dropdown-item">911 GT3</a>
+            </div>
+          </div>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+      </nav>
+
+      <!-- Main Content: Video Wall -->
+      <section class="video-wall">
+        <div class="video-card">
+          <div class="video-wrapper">
+            <!-- Replace sample-video.mp4 with the actual video source -->
+            <video src="sample-video.mp4" autoplay loop muted></video>
+          </div>
+          <div class="card-overlay"></div>
+          <div class="progress-bar"></div>
+          <div class="model-info">Porsche 911 GT3 RS</div>
+        </div>
+        <!-- Add additional video cards as needed -->
+      </section>
+
+      <!-- Footer Section -->
+      <footer class="footer">
+        <p>© 2025 Porsche 911 GT3 RS</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon">F</a>
+          <a href="#" class="social-icon">T</a>
+          <a href="#" class="social-icon">I</a>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript for Mobile Navigation Toggle -->
+    <script>
+      document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.querySelector('.nav-bar').classList.toggle('active');
+      });
+    </script>
   </body>
 </html>
