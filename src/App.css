@@ -1,10 +1,19 @@
-/* src/App.css */
+/* src/App.css - Enhanced 3D Modern UI */
+
 :root {
   --neon-blue: #00f3ff;
   --neon-pink: #ff00ff;
-  --card-width: 300px;
-  --mobile-width: 74.7mm;
-  --mobile-height: 161.7mm;
+  --dark-bg: #0a0a0a; /* Slightly darker background */
+  --card-bg: #111;
+  --card-width: 320px; /* Slightly larger cards */
+  --mobile-width: 80mm; /* Adjusted mobile size */
+  --mobile-height: 170mm; /* Adjusted mobile size */
+  --perspective-distance: 1500px; /* Depth of the 3D space */
+  --card-hover-lift: 50px;
+  --card-active-lift: 80px;
+  --transition-speed: 0.5s;
+  --transition-easing: cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother easing */
+  --modern-font: 'Poppins', 'Segoe UI', 'Roboto', 'Arial', sans-serif; /* Modern font stack */
 }
 
 * {
@@ -14,13 +23,17 @@
 }
 
 body {
-  background: #000;
+  background: var(--dark-bg);
   min-height: 100vh;
   overflow-x: hidden;
-  font-family: 'Arial', sans-serif;
+  font-family: var(--modern-font);
   position: relative;
+  color: #eee; /* Lighter default text color */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- Background Animation (Optional Enhancement) --- */
 .bg-animation {
   position: fixed;
   top: 0;
@@ -28,63 +41,88 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  opacity: 0.3;
-  display: none;
+  opacity: 0.15; /* Slightly more subtle */
+  overflow: hidden; /* Prevent potential scrollbars from large spans */
+  pointer-events: none; /* Ensure it doesn't interfere */
+  /* display: none; */ /* Keep hidden initially if controlled by JS */
 }
 
 .bg-animation span {
   position: absolute;
   border-radius: 50%;
   background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
-  animation: float 15s linear infinite;
-  opacity: 0.3;
+  animation: float 20s linear infinite alternate; /* Alternate direction */
+  opacity: 0; /* Start invisible */
+  filter: blur(5px); /* Soften the edges */
 }
+
+/* Assign different sizes and animation delays via JS or nth-child if static */
+.bg-animation span:nth-child(1) { width: 50px; height: 50px; left: 10%; animation-delay: 0s; }
+.bg-animation span:nth-child(2) { width: 80px; height: 80px; left: 30%; animation-delay: 2s; }
+.bg-animation span:nth-child(3) { width: 30px; height: 30px; left: 50%; animation-delay: 5s; }
+.bg-animation span:nth-child(4) { width: 100px; height: 100px; left: 70%; animation-delay: 8s; }
+.bg-animation span:nth-child(5) { width: 60px; height: 60px; left: 90%; animation-delay: 11s; }
+/* Add more spans for a denser effect */
+
 
 @keyframes float {
   0% {
-      transform: translateY(0) translateX(0) rotate(0deg);
-      opacity: 0;
+    transform: translateY(100vh) translateX(-50vw) rotate(0deg) scale(0.5);
+    opacity: 0;
   }
   50% {
-      opacity: 0.3;
+    opacity: 0.2; /* Max opacity */
   }
   100% {
-      transform: translateY(-100vh) translateX(100vw) rotate(360deg);
-      opacity: 0;
+    transform: translateY(-100vh) translateX(50vw) rotate(720deg) scale(1.2);
+    opacity: 0;
   }
 }
 
+/* --- Video Wall - 3D Perspective --- */
 .video-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
-  max-width: 2000px;
-  margin: 0 auto;
+  gap: 2.5rem; /* Increased gap */
+  padding: 3rem;
+  max-width: 1800px;
+  margin: 2rem auto; /* Added top/bottom margin */
   position: relative;
   z-index: 1;
+  perspective: var(--perspective-distance); /* Apply 3D perspective */
 }
 
+/* --- Video Card - 3D Transformation --- */
 .video-card {
   position: relative;
-  border-radius: 12px;
+  border-radius: 15px; /* Slightly more rounded */
   overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-  transform: scale(0.98);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background-color: #000;
+  transition: transform var(--transition-speed) var(--transition-easing),
+              box-shadow var(--transition-speed) var(--transition-easing);
+  transform-style: preserve-3d; /* Allow children to be positioned in 3D */
+  transform: scale(0.95) translateZ(0); /* Start slightly smaller, ready for lift */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Deeper initial shadow */
+  background-color: var(--card-bg);
   aspect-ratio: 16/9;
+  will-change: transform, box-shadow; /* Performance hint */
 }
 
 .video-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+  /* Lift and slightly tilt the card on hover */
+  transform: scale(1.03) translateZ(var(--card-hover-lift)) rotateY(5deg); /* Example tilt */
+  /* Note: For dynamic tilt based on cursor position, JS is needed */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), /* Base shadow */
+              0 0 30px -5px rgba(0, 243, 255, 0.5); /* Neon glow */
+  z-index: 10; /* Bring hovered card forward */
 }
 
 .video-card.active {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px var(--neon-blue);
-  z-index: 10;
+  /* Lift the card significantly when active */
+  transform: scale(1.1) translateZ(var(--card-active-lift)); /* Lift higher, no tilt */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), /* Stronger base shadow */
+              0 0 60px var(--neon-blue), /* Intense neon glow */
+              0 0 20px var(--neon-pink) inset; /* Subtle inner glow */
+  z-index: 20; /* Highest z-index */
 }
 
 .video-wrapper {
@@ -92,231 +130,175 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  border-radius: inherit; /* Inherit border-radius */
+  /* Add a subtle inner shadow for depth */
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+  transform: translateZ(0); /* Ensure it's on the 3D plane */
 }
 
 video {
+  display: block; /* Remove extra space below */
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(0.5);
-  transition: filter 0.3s ease;
+  filter: grayscale(0.3) brightness(0.9); /* Less grayscale, slightly dimmed */
+  transition: filter 0.4s ease;
 }
 
+.video-card:hover video,
 .video-card.active video {
-  filter: grayscale(0);
+  filter: grayscale(0) brightness(1); /* Full color and brightness */
 }
 
 .card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, rgba(0,0,0,0.7), transparent);
+  background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, transparent 100%); /* Adjusted gradient */
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
+  pointer-events: none; /* Allow hover on elements below */
+  border-radius: inherit;
 }
 
+.video-card:hover .card-overlay,
 .video-card.active .card-overlay {
   opacity: 0;
 }
 
+/* --- Progress Bar - Enhanced --- */
 .progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 3px;
+  height: 4px; /* Slightly thicker */
   width: 0%;
   background: var(--neon-blue);
   z-index: 3;
   transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--neon-blue); /* Add glow */
+  border-radius: 0 2px 2px 0; /* Rounded end */
 }
 
 .video-card.active .progress-bar {
   background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+  box-shadow: 0 0 12px var(--neon-blue), 0 0 8px var(--neon-pink); /* Dual glow */
 }
 
+/* --- Model Info - Positioned in 3D Space --- */
 .model-info {
   position: absolute;
   bottom: 15px;
   left: 15px;
   color: white;
-  font-weight: bold;
-  text-shadow: 0 0 5px rgba(0,0,0,0.8);
+  font-weight: 600; /* Slightly bolder */
+  font-size: 0.9rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(15px) translateZ(10px); /* Start lower, slightly forward */
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s; /* Delay transition */
   z-index: 2;
 }
 
+.video-card:hover .model-info, /* Show on hover too */
 .video-card.active .model-info {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) translateZ(10px); /* Slide into view */
 }
 
-/* Easter Egg Button */
+/* --- Play/Pause Button - Floating Effect --- */
+.play-pause-overlay {
+  position: absolute;
+  inset: 0; /* Cover entire card */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--transition-speed) var(--transition-easing);
+  z-index: 4;
+  pointer-events: none; /* Allow clicks to pass through by default */
+  border-radius: inherit;
+}
+
+.play-pause-overlay.show-controls,
+.video-card:hover .play-pause-overlay {
+  opacity: 1;
+}
+
+.play-pause-button {
+  width: 65px;
+  height: 65px;
+  background-color: rgba(10, 10, 10, 0.7); /* Darker semi-transparent */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  pointer-events: all; /* Make the button clickable */
+  transform: translateZ(30px); /* Make button float above video */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+}
+
+.video-card:hover .play-pause-button {
+  transform: translateZ(30px) scale(1.15); /* Scale up more on hover */
+  box-shadow: 0 0 30px var(--neon-blue);
+}
+
+.play-pause-button svg { /* Assuming SVG icon */
+  width: 30px;
+  height: 30px;
+  fill: var(--neon-blue); /* Use neon color for icon */
+  filter: drop-shadow(0 0 5px var(--neon-blue));
+}
+
+
+/* --- Easter Egg Button & Animation --- */
 .easter-egg-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: #111;
+  bottom: 25px;
+  right: 25px;
+  width: 50px; /* Larger */
+  height: 50px;
+  background-color: var(--card-bg);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   z-index: 100;
-  opacity: 0.5;
+  opacity: 0.6;
   transition: all 0.3s ease;
+  border: 1px solid rgba(var(--neon-blue), 0.5);
+  box-shadow: 0 0 10px rgba(var(--neon-blue), 0.3);
 }
 
 .easter-egg-button:hover {
   opacity: 1;
-  box-shadow: 0 0 10px var(--neon-blue);
+  box-shadow: 0 0 15px var(--neon-blue);
+  transform: scale(1.1) rotate(15deg); /* Add rotation */
 }
 
 .easter-egg-button span {
   color: var(--neon-blue);
-  font-size: 24px;
+  font-size: 28px;
 }
 
-/* Easter Egg Animation */
-.easter-egg-active .video-card:not(.active) {
-  animation: colorShift 2s infinite alternate;
+.easter-egg-active .video-card:not(.active):not(:hover) {
+   /* Apply only if not active and not hovered */
+  animation: colorShift 2s infinite alternate ease-in-out; /* Smoother easing */
 }
 
 @keyframes colorShift {
   0% {
-      box-shadow: 0 0 20px var(--neon-blue);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(0, 243, 255, 0.7);
   }
-  50% {
-      box-shadow: 0 0 20px var(--neon-pink);
-  }
-  100% {
-      box-shadow: 0 0 20px var(--neon-blue);
+  100% { /* Changed end point for smoother transition */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(255, 0, 255, 0.7);
   }
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-  .bg-animation {
-      display: none !important;
-  }
-  
-  .video-wall {
-      grid-template-columns: 1fr;
-      padding: 0;
-      gap: 0;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
-  
-  .video-card {
-      width: var(--mobile-width);
-      height: var(--mobile-height);
-      max-width: 90vw;
-      max-height: 90vh;
-      border-radius: 12px;
-      aspect-ratio: unset;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      margin: 0;
-      opacity: 0;
-      visibility: hidden;
-  }
-  
-  .video-card.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
-  }
-  
-  .video-wrapper {
-      height: 100%;
-  }
-  
-  video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-  }
-}
-
-
-
-/* Play/Pause Button Styles - Add to your App.css */
-.play-pause-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 4;
-  pointer-events: none; /* Allow clicks to pass through to the card */
-}
-
-.play-pause-overlay.show-controls {
-  opacity: 1;
-}
-
-.video-card:hover .play-pause-overlay {
-  opacity: 1;
-}
-
-.play-pause-button {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.video-card:hover .play-pause-button {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px var(--neon-blue);
-}
-
-/* For mobile, make the button a bit larger and more opaque */
-@media (max-width: 768px) {
-  .play-pause-button {
-    width: 70px;
-    height: 70px;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  
-  /* Always show controls briefly when switching videos on mobile */
-  .video-card.active .play-pause-overlay {
-    opacity: 1;
-  }
-  
-  /* Add a transition delay for mobile to ensure controls are visible long enough */
-  .play-pause-overlay {
-    transition: opacity 0.5s ease;
-  }
-}
-
-
-
-
-
-/* Add this to your App.css file */
-
-/* Install Prompt Styles - Stylish, Modern and Funky Version */
+/* --- Install Prompt - Subtle 3D Touch --- */
 .install-prompt {
   position: fixed;
   bottom: 0;
@@ -324,300 +306,249 @@ video {
   right: 0;
   z-index: 1000;
   padding: 15px;
-  animation: bounceUp 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  animation: bounceUp 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  font-family: var(--modern-font);
+  perspective: 800px; /* Give prompt its own shallow perspective */
 }
 
 .install-prompt-content {
-  background: linear-gradient(135deg, #6366f1, #ec4899);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 
-              0 0 20px rgba(99, 102, 241, 0.6),
-              0 0 10px rgba(236, 72, 153, 0.5);
+  background: linear-gradient(135deg, #5b21b6, #d946ef); /* Adjusted gradient */
+  border-radius: 22px; /* More rounded */
+  padding: 25px 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5),
+              0 0 30px rgba(91, 33, 182, 0.7),
+              0 0 15px rgba(217, 70, 239, 0.6);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: rotateX(-5deg); /* Slight tilt for 3D effect */
+  transition: transform 0.5s ease; /* Add transition */
 }
+
+.install-prompt:hover .install-prompt-content {
+   transform: rotateX(0deg); /* Flatten on hover */
+}
+
+/* ... (Keep existing install prompt ::before, ::after, icon, text, actions styles) ... */
+/* Or optionally refine them further below if desired */
 
 /* Funky background pattern */
 .install-prompt-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 25%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.15) 0%, transparent 25%);
-  pointer-events: none;
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background:
+   radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+   radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 20%);
+ pointer-events: none;
+ opacity: 0.7;
 }
 
 /* Animated decorative elements */
 .install-prompt-content::after {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  filter: blur(5px);
-  animation: floatBubble 6s infinite alternate ease-in-out;
+ content: '';
+ position: absolute;
+ top: -60px;
+ right: -60px;
+ width: 120px;
+ height: 120px;
+ border-radius: 50%;
+ background: rgba(255, 255, 255, 0.08);
+ filter: blur(10px);
+ animation: floatBubble 7s infinite alternate ease-in-out;
 }
 
 .install-prompt-icon {
-  background: linear-gradient(45deg, #4f46e5, #d946ef);
-  border-radius: 20px;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  transform: rotate(-5deg);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  z-index: 1;
+ background: linear-gradient(45deg, #4338ca, #c026d3);
+ border-radius: 20px;
+ width: 60px;
+ height: 60px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ margin: 0 auto 16px;
+ transform: rotate(-8deg); /* Increased rotation */
+ box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+ position: relative;
+ z-index: 1;
 }
 
 .install-prompt-icon::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  background: linear-gradient(45deg, #f97316, #ec4899, #8b5cf6, #3b82f6);
-  border-radius: 22px;
-  z-index: -1;
-  filter: blur(4px);
-  opacity: 0.7;
-  animation: iconGlow 3s infinite linear;
+ content: '';
+ position: absolute;
+ inset: -5px; /* Wider glow */
+ background: linear-gradient(45deg, #f59e0b, #ec4899, #8b5cf6, #3b82f6);
+ background-size: 200% 200%; /* For animation */
+ border-radius: 25px;
+ z-index: -1;
+ filter: blur(6px); /* More blur */
+ opacity: 0.8;
+ animation: iconGlow 4s infinite linear;
 }
 
 .install-prompt-icon svg {
-  width: 32px;
-  height: 32px;
-  color: white;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-  animation: pulse 2s infinite;
+ width: 32px;
+ height: 32px;
+ color: white;
+ filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.4));
+ animation: pulse 2.5s infinite ease-in-out; /* Smoother pulse */
 }
 
 .install-prompt-text {
-  text-align: center;
-  margin-bottom: 20px;
-  color: white;
-  position: relative;
-  z-index: 1;
+ text-align: center;
+ margin-bottom: 20px;
+ color: white;
+ position: relative;
+ z-index: 1;
 }
 
 .install-prompt-text h3 {
-  margin: 0 0 8px;
-  font-size: 22px;
-  font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.5px;
-  background: linear-gradient(to right, #ffffff, #f0f0f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+ margin: 0 0 8px;
+ font-size: 22px;
+ font-weight: 700;
+ text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+ letter-spacing: 0.5px;
+ /* Simple white for better readability */
+ color: #fff;
+ /* Remove complex gradient if it hurts readability */
+ /* background: linear-gradient(to right, #ffffff, #f0f0f0);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent; */
 }
 
 .install-prompt-text p {
-  margin: 0;
-  font-size: 16px;
-  opacity: 0.95;
-  line-height: 1.5;
-  max-width: 280px;
-  margin: 0 auto;
+ margin: 0;
+ font-size: 16px;
+ opacity: 0.9;
+ line-height: 1.6; /* Increased line height */
+ max-width: 300px; /* Slightly wider */
+ margin: 0 auto;
 }
 
 .install-prompt-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-  margin-top: 4px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ z-index: 1;
+ margin-top: 8px;
 }
 
 .install-btn {
-  background: linear-gradient(to right, #ffffff, #f0f0f0);
-  color: #6366f1;
-  border: none;
-  border-radius: 30px;
-  padding: 12px 30px;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
+ background: #ffffff;
+ color: #6366f1;
+ border: none;
+ border-radius: 30px;
+ padding: 14px 35px; /* Larger padding */
+ font-weight: 700;
+ font-size: 17px;
+ cursor: pointer;
+ transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+ letter-spacing: 0.8px;
+ position: relative;
+ overflow: hidden;
 }
 
 .install-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: 0.5s;
+ content: '';
+ position: absolute;
+ top: 0;
+ left: -100%;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.3), transparent); /* Use accent color */
+ transition: 0.6s;
 }
 
 .install-btn:hover::before {
-  left: 100%;
+ left: 100%;
 }
 
 .install-btn:hover, .install-btn:active {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+ transform: translateY(-5px) scale(1.03);
+ box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+ color: #4f46e5; /* Darker color on hover */
 }
 
 .install-btn:active {
-  transform: translateY(1px) scale(0.98);
+ transform: translateY(0px) scale(0.97); /* More noticeable press */
 }
 
 .close-btn {
-  position: absolute;
-  top: -40px;
-  right: -5px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.9);
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(5px);
+ position: absolute;
+ top: -45px; /* Adjusted position */
+ right: 0px;
+ background: rgba(0, 0, 0, 0.2); /* Darker background */
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ width: 36px;
+ height: 36px;
+ border-radius: 50%;
+ cursor: pointer;
+ color: rgba(255, 255, 255, 0.8);
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ backdrop-filter: blur(6px);
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg);
+ background: rgba(0, 0, 0, 0.4);
+ transform: rotate(180deg) scale(1.1); /* Rotate more, scale */
+ color: #fff;
 }
 
 .close-btn svg {
-  width: 18px;
-  height: 18px;
+ width: 18px;
+ height: 18px;
 }
 
-/* Funky Animations */
+/* --- Animations (Refined) --- */
+
 @keyframes bounceUp {
-  0% {
-    transform: translateY(120%);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
+ 0% {
+   transform: translateY(110%) rotateX(-15deg); /* Start further down and tilted */
+   opacity: 0;
+ }
+ 70% {
+   transform: translateY(-10px) rotateX(5deg);
+ }
+ 100% {
+   transform: translateY(0) rotateX(-5deg); /* End with slight tilt */
+   opacity: 1;
+ }
 }
 
 @keyframes floatBubble {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(-20px, 20px) scale(1.2);
-  }
+ 0% {
+   transform: translate(0, 0) scale(1) rotate(0deg);
+ }
+ 50% {
+   transform: translate(-25px, 25px) scale(1.2) rotate(15deg);
+ }
+ 100% {
+   transform: translate(0, 0) scale(1) rotate(0deg);
+ }
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.12); } /* Slightly stronger pulse */
 }
 
 @keyframes iconGlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
 }
 
-/* For iOS Safari-specific instructions */
-@media (display-mode: browser) {
-  .ios-specific-instructions {
-    display: block;
-  }
-}
-
-@media (display-mode: standalone) {
-  .install-prompt {
-    display: none;
-  }
-}
-
-/* Make sure the prompt is displayed properly on different screen sizes */
-@media (max-width: 480px) {
-  .install-prompt {
-    padding: 10px;
-  }
-  
-  .install-prompt-text h3 {
-    font-size: 20px;
-  }
-  
-  .install-prompt-text p {
-    font-size: 14px;
-  }
-  
-  .install-btn {
-    padding: 10px 24px;
-    font-size: 15px;
-  }
-}
-
-/* Add some extra funk with animated emoji that appears randomly */
-.install-prompt-content .emoji-funk {
-  position: absolute;
-  font-size: 24px;
-  opacity: 0;
-  animation: emojiPop 3s ease-out infinite;
-  filter: drop-shadow(0 0 3px rgba(0,0,0,0.3));
-}
-
-.install-prompt-content .emoji-funk:nth-child(1) {
-  top: 10%;
-  left: 10%;
-  animation-delay: 0.5s;
-}
-
-.install-prompt-content .emoji-funk:nth-child(2) {
-  top: 15%;
-  right: 15%;
-  animation-delay: 1.2s;
-}
-
-.install-prompt-content .emoji-funk:nth-child(3) {
-  bottom: 20%;
-  left: 20%;
-  animation-delay: 1.8s;
-}
-
+/* (Keep emojiPop animation as is, or adjust timing/transform if desired) */
 @keyframes emojiPop {
   0% {
     transform: scale(0) rotate(-20deg);
@@ -645,4 +576,148 @@ video {
   100% {
     opacity: 0;
   }
+}
+.install-prompt-content .emoji-funk {
+ position: absolute;
+ font-size: 24px;
+ opacity: 0;
+ animation: emojiPop 3.5s ease-out infinite; /* Slightly slower */
+ filter: drop-shadow(0 0 4px rgba(0,0,0,0.4));
+}
+.install-prompt-content .emoji-funk:nth-child(1) { top: 10%; left: 10%; animation-delay: 0.5s; }
+.install-prompt-content .emoji-funk:nth-child(2) { top: 15%; right: 15%; animation-delay: 1.2s; }
+.install-prompt-content .emoji-funk:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 1.8s; }
+
+
+/* --- Mobile Styles - Simplify 3D --- */
+@media (max-width: 768px) {
+  /* Disable perspective on the wall for mobile */
+  .video-wall {
+    perspective: none;
+    padding: 0;
+    gap: 0;
+    height: 100vh; /* Use viewport height */
+    display: flex; /* Use flex to center the active card */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide non-active cards properly */
+    margin: 0; /* Remove auto margins */
+  }
+
+  .video-card {
+    width: var(--mobile-width);
+    height: var(--mobile-height);
+    max-width: 95vw; /* Use viewport width relative */
+    max-height: 95vh; /* Use viewport height relative */
+    border-radius: 18px; /* Larger radius for mobile */
+    aspect-ratio: unset; /* Remove fixed aspect ratio */
+    position: absolute; /* Position all cards in the center */
+    top: 50%;
+    left: 50%;
+    /* Reset 3D transforms for mobile, use simple translate */
+    transform: translate(-50%, -50%) scale(1);
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease; /* Transition opacity/visibility */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Standard mobile shadow */
+  }
+
+  /* Disable hover effects that rely on 3D transforms */
+  .video-card:hover {
+    transform: translate(-50%, -50%) scale(1); /* Keep centered */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Keep standard shadow */
+    z-index: auto;
+  }
+
+  .video-card.active {
+    opacity: 1;
+    visibility: visible;
+    /* Center active card, slight scale up */
+    transform: translate(-50%, -50%) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(0, 243, 255, 0.4); /* Active glow for mobile */
+    z-index: 10; /* Ensure active is on top */
+  }
+
+  .video-wrapper {
+    height: 100%;
+    box-shadow: none; /* Remove inner shadow on mobile */
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Contain video within mobile card dimensions */
+    background: #000; /* Black background for pillar/letterboxing */
+    filter: grayscale(0) brightness(1); /* Ensure video is clear on mobile */
+  }
+
+   /* Always show controls briefly on active mobile card */
+  .video-card.active .play-pause-overlay {
+    opacity: 1;
+    transition: opacity 0.5s ease 0.2s; /* Fade in controls slightly delayed */
+  }
+
+  /* Reset 3D position for overlay elements */
+  .model-info {
+      transform: translateY(10px) translateZ(0); /* Reset Z */
+  }
+  .video-card.active .model-info {
+      transform: translateY(0) translateZ(0);
+  }
+  .play-pause-button {
+     transform: translateZ(0); /* Reset Z */
+  }
+   .video-card:hover .play-pause-button {
+      transform: scale(1.1) translateZ(0); /* Reset Z */
+   }
+
+   /* Reset Install Prompt Tilt */
+   .install-prompt {
+      perspective: none;
+   }
+   .install-prompt-content {
+      transform: rotateX(0deg); /* No tilt on mobile */
+   }
+}
+
+/* PWA Display Mode Adjustments */
+@media (display-mode: browser) {
+  /* Styles specific to browser mode if needed */
+  .ios-specific-instructions { /* Example class */
+     display: block;
+  }
+}
+
+@media (display-mode: standalone) {
+  .install-prompt {
+    display: none; /* Hide prompt when installed */
+  }
+  /* Potentially adjust body padding etc. if browser UI is gone */
+}
+
+/* Smaller Mobile Adjustments for Prompt */
+@media (max-width: 480px) {
+ .install-prompt {
+   padding: 10px;
+ }
+
+ .install-prompt-content {
+    padding: 20px 15px;
+ }
+
+ .install-prompt-text h3 {
+   font-size: 20px;
+ }
+
+ .install-prompt-text p {
+   font-size: 15px;
+   max-width: 90%;
+ }
+
+ .install-btn {
+   padding: 12px 28px;
+   font-size: 16px;
+ }
 }
