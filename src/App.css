@@ -1,20 +1,18 @@
-/* src/App.css */
-
 /* ============================================
    1. Root Variables - Rich English Color Palette
    ============================================ */
    :root {
-    /* Core English Colors */
-    --burgundy: #800020;          /* Deep Burgundy */
-    --navy-blue: #003366;         /* Rich Navy Blue */
-    --emerald-green: #004d00;     /* Dark Emerald */
-    --gold: #ffd700;              /* Warm Gold */
-    --charcoal: #121212;          /* Near-Black Base */
-    --ivory: #f5f5f5;             /* Soft Ivory */
-    --slate-grey: #708090;        /* Muted Slate */
-    --rosewood: #650021;          /* Rosewood Red */
-    --olive: #808000;             /* Subtle Olive */
-    --cream: #fffdd0;             /* Light Cream */
+    /* Core Colors */
+    --burgundy: #800020;
+    --navy-blue: #003366;
+    --emerald-green: #004d00;
+    --gold: #ffd700;
+    --charcoal: #121212;
+    --ivory: #f5f5f5;
+    --slate-grey: #708090;
+    --rosewood: #650021;
+    --olive: #808000;
+    --cream: #fffdd0;
   
     /* Complementary Shades */
     --burgundy-light: #a00030;
@@ -29,100 +27,13 @@
     --slate-light: #8997a5;
   
     /* Effects and Utilities */
-    --glow: rgba(255, 215, 0, 0.5);       /* Gold Glow */
-    --shadow: rgba(0, 0, 0, 0.8);         /* Deep Shadow */
+    --glow: rgba(255, 215, 0, 0.5);
+    --shadow: rgba(0, 0, 0, 0.8);
     --transition-speed: 0.4s;
     --spacing-unit: 1rem;
     --card-width: 320px;
-    --mobile-width: 74.7mm;
-    --mobile-height: 161.7mm;
-  }
-  
-  /* ============================================
-     2. Global Styles
-     ============================================ */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    background: var(--charcoal);
-    color: var(--ivory);
-    font-family: 'Georgia', serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-    background-image: radial-gradient(circle, var(--gold) 1px, transparent 1px);
-    background-size: 30px 30px;
-    animation: subtle-grain 6s infinite linear;
-  }
-  
-  @keyframes subtle-grain {
-    0% { background-position: 0 0; }
-    100% { background-position: 30px 30px; }
-  }
-  
-  /* ============================================
-     3. Background Animation Layer
-     ============================================ */
-  .bg-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.3;
-    pointer-events: none;
-  }
-  
-  .bg-animation span {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--burgundy), var(--navy-blue), var(--emerald-green));
-    box-shadow: 0 0 25px var(--glow);
-    animation: float 10
-  }
-  /* src/App.css */
-  
-  /* ============================================
-     1. Root Variables - Rich English Color Palette
-     ============================================ */
-  :root {
-    /* Core English Colors */
-    --burgundy: #800020;          /* Deep Burgundy */
-    --navy-blue: #003366;         /* Rich Navy Blue */
-    --emerald-green: #004d00;     /* Dark Emerald */
-    --gold: #ffd700;              /* Warm Gold */
-    --charcoal: #121212;          /* Near-Black Base */
-    --ivory: #f5f5f5;             /* Soft Ivory */
-    --slate-grey: #708090;        /* Muted Slate */
-    --rosewood: #650021;          /* Rosewood Red */
-    --olive: #808000;             /* Subtle Olive */
-    --cream: #fffdd0;             /* Light Cream */
-  
-    /* Complementary Shades */
-    --burgundy-light: #a00030;
-    --burgundy-dark: #600010;
-    --navy-light: #004080;
-    --navy-dark: #002040;
-    --emerald-light: #006600;
-    --emerald-dark: #003300;
-    --gold-light: #ffe033;
-    --gold-dark: #ccac00;
-    --charcoal-light: #2a2a2a;
-    --slate-light: #8997a5;
-  
-    /* Effects and Utilities */
-    --glow: rgba(255, 215, 0, 0.5);       /* Gold Glow */
-    --shadow: rgba(0, 0, 0, 0.8);         /* Deep Shadow */
-    --transition-speed: 0.4s;
-    --spacing-unit: 1rem;
-    --card-width: 320px;
-    --mobile-width: 90vw;  /* Adjusted for better mobile fit */
-    --mobile-height: 50vh; /* Adjusted for better mobile fit */
+    --mobile-width: 90vw;
+    --mobile-height: 50vh;
   }
   
   /* ============================================
@@ -173,6 +84,7 @@
     animation: float 10s ease-in-out infinite, hue-shift 5s infinite alternate;
   }
   
+  /* Position each animated span */
   .bg-animation span:nth-child(1) { left: 15%; top: 20%; width: 40px; height: 40px; animation-delay: 0s; }
   .bg-animation span:nth-child(2) { left: 35%; top: 50%; width: 60px; height: 60px; animation-delay: 2s; }
   .bg-animation span:nth-child(3) { left: 55%; top: 30%; width: 30px; height: 30px; animation-delay: 4s; }
@@ -180,8 +92,8 @@
   .bg-animation span:nth-child(5) { left: 95%; top: 10%; width: 35px; height: 35px; animation-delay: 8s; }
   
   @keyframes float {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    50% { opacity: 0.6; }
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    50%  { opacity: 0.6; }
     100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
   }
   
@@ -200,7 +112,6 @@
     padding: calc(var(--spacing-unit) * 3);
     max-width: 2200px;
     margin: 0 auto;
-    position: relative;
     perspective: 2000px;
     transform-style: preserve-3d;
   }
@@ -216,7 +127,7 @@
     box-shadow: 0 0 20px var(--shadow);
     transition: all var(--transition-speed) cubic-bezier(0.68, -0.55, 0.27, 1.55);
     transform: scale(0.9);
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
     transform-style: preserve-3d;
   }
   
@@ -254,7 +165,7 @@
   }
   
   /* ============================================
-     6. Video Wrapper
+     6. Video Wrapper & Media
      ============================================ */
   .video-wrapper {
     width: 100%;
@@ -347,7 +258,7 @@
   }
   
   /* ============================================
-     10. Navigation Bar
+     10. Navigation Bar & Dropdown Menu
      ============================================ */
   .nav-bar {
     position: fixed;
@@ -408,9 +319,6 @@
     width: 100%;
   }
   
-  /* ============================================
-     11. Dropdown Menu
-     ============================================ */
   .nav-dropdown {
     position: relative;
   }
@@ -448,7 +356,7 @@
   }
   
   /* ============================================
-     12. Footer
+     11. Footer & Socials
      ============================================ */
   .footer {
     background: var(--navy-blue);
@@ -491,7 +399,7 @@
   }
   
   /* ============================================
-     13. Button Styles
+     12. Button Styles
      ============================================ */
   .btn {
     padding: 0.8rem 1.5rem;
@@ -545,7 +453,7 @@
   }
   
   /* ============================================
-     14. Easter Egg Button
+     13. Easter Egg Button
      ============================================ */
   .easter-egg-button {
     position: fixed;
@@ -594,7 +502,7 @@
   }
   
   /* ============================================
-     15. Install Prompt
+     14. Install Prompt
      ============================================ */
   .install-prompt {
     position: fixed;
@@ -663,8 +571,9 @@
   }
   
   /* ============================================
-     16. Utility Classes (Expandable Section)
+     15. Utility Classes
      ============================================ */
+  /* Margin and Padding Utilities */
   .m-0 { margin: 0; }
   .m-1 { margin: 0.25rem; }
   .m-2 { margin: 0.5rem; }
@@ -700,13 +609,14 @@
   .pt-4 { padding-top: 1.5rem; }
   .pt-5 { padding-top: 2rem; }
   
+  /* Flex and Text Alignment */
   .flex { display: flex; }
   .flex-column { flex-direction: column; }
   .justify-center { justify-content: center; }
   .align-center { align-items: center; }
   .text-center { text-align: center; }
   
-  /* Colors */
+  /* Background and Text Color Utilities */
   .bg-burgundy { background: var(--burgundy); }
   .bg-navy { background: var(--navy-blue); }
   .bg-emerald { background: var(--emerald-green); }
@@ -717,7 +627,7 @@
   .text-gold { color: var(--gold); }
   
   /* ============================================
-     17. Enhanced Mobile Responsive Media Queries
+     16. Enhanced Mobile Responsive Media Queries
      ============================================ */
   @media (max-width: 1024px) {
     .video-wall {
@@ -736,15 +646,14 @@
   
   @media (max-width: 768px) {
     :root {
-      --spacing-unit: 0.75rem; /* Reduced spacing for smaller screens */
-      --card-width: 100%; /* Full width cards */
+      --spacing-unit: 0.75rem; /* Reduced spacing */
+      --card-width: 100%;
     }
   
     .video-wall {
       display: flex;
       flex-direction: column;
       padding: var(--spacing-unit);
-      height: auto;
       gap: var(--spacing-unit);
     }
   
@@ -753,23 +662,11 @@
       height: var(--mobile-height);
       margin: 0 auto;
       transform: scale(1);
-      position: relative;
-      top: auto;
-      left: auto;
-      opacity: 1;
-      visibility: visible;
-      aspect-ratio: auto;
     }
   
     .video-card:not(.active) {
-      opacity: 0.7;
+      opacity: 0.85;
       transform: scale(0.95);
-    }
-  
-    .video-card.active {
-      transform: scale(1);
-      position: relative;
-      margin: var(--spacing-unit) auto;
     }
   
     .nav-bar {
@@ -782,40 +679,11 @@
       width: 100%;
       background: var(--charcoal);
       padding: var(--spacing-unit);
-      display: none;
-      position: static;
+      display: none; /* Toggle via JS for mobile menu */
     }
   
     .nav-bar.active .nav-links {
       display: flex;
-    }
-  
-    .nav-link {
-      font-size: 1rem;
-      padding: 0.5rem 0;
-    }
-  
-    .dropdown-content {
-      position: static;
-      width: 100%;
-      transform: none;
-      box-shadow: none;
-    }
-  
-    .footer {
-      padding: calc(var(--spacing-unit) * 2);
-    }
-  
-    .social-icon {
-      width: 35px;
-      height: 35px;
-    }
-  
-    .easter-egg-button {
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
     }
   }
   
@@ -839,18 +707,11 @@
       font-size: 1.5rem;
     }
   
-    .install-prompt-text p {
-      font-size: 0.9rem;
-    }
-  
+    .install-prompt-text p,
+    .btn,
     .install-btn {
-      padding: 0.6rem 1.5rem;
       font-size: 0.9rem;
-    }
-  
-    .btn {
       padding: 0.6rem 1rem;
-      font-size: 0.9rem;
     }
   
     .video-card {
@@ -863,7 +724,7 @@
   }
   
   /* ============================================
-     18. Additional Animations
+     17. Additional Animations
      ============================================ */
   @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -889,3 +750,4 @@
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
   }
+  
